@@ -27,3 +27,54 @@ class Unit:
         elif self.nodes[1] == node_id:
             vector[unit_id] = 1
         return vector
+
+
+class Resistor(Unit):
+    def __init__(self, nodes, R):
+        super().__init__(nodes, a=R, b=-1, c=0)
+
+
+class VoltageSource(Unit):
+    """
+    nodes[0]- nodes[1]+
+    """
+    def __init__(self, nodes, U):
+        super().__init__(nodes, a=0, b=-1, c=U)
+
+
+class CurrentSource(Unit):
+    """
+    nodes[0]-> nodes[1]
+    """
+    def __init__(self, nodes, I):
+        super().__init__(nodes, a=1, b=0, c=I)
+
+class ControlledVoltageSource(Unit):
+    """
+    control = [0,0,...,1,...0]
+    """
+    def __init__(self, nodes, control):
+        super().__init__(nodes, a=0, b=-1, c=control)
+
+    def kvl(self, unit_id, sum_units, sum_nodes):
+        vector = np.zeros(sum_units + sum_nodes)
+        vector[unit_id] = self.a
+        vector[self.nodes[0] + sum_units] = self.b
+        vector[self.nodes[1] + sum_units] = - self.b
+        vector -= self.control
+        return vector, 0    
+
+class ControlledCurrentSource(Unit):
+    """
+    control = [0,0,...,1,...0]
+    """
+    def __init__(self, nodes, control):
+        super().__init__(nodes, a=1, b=0, c=control)
+
+    def kvl(self, unit_id, sum_units, sum_nodes):
+        vector = np.zeros(sum_units + sum_nodes)
+        vector[unit_id] = self.a
+        vector[self.nodes[0] + sum_units] = self.b
+        vector[self.nodes[1] + sum_units] = - self.b
+        vector -= self.control
+        return vector, 0 

@@ -11,13 +11,11 @@ def circuit_init():
     units.append(unit.Unit([3, 4], 2, -1, 0))
     units.append(unit.Unit([0, 4], 1, 0, 9))
     sum_nodes = 5
-    sum_units = 7
-    return units, sum_nodes, sum_units
-
-
-def main():
-    units, sum_nodes, sum_units = circuit_init()
     nodes= np.zeros(sum_nodes)
+    sum_units = 7
+    return units, nodes, sum_nodes, sum_units
+
+def solver(units, nodes, sum_nodes, sum_units):
     A = np.zeros((sum_units + sum_nodes, sum_units + sum_nodes))
     b = np.zeros(sum_units + sum_nodes)
     A[0,sum_units] = 1
@@ -32,7 +30,11 @@ def main():
         unit.i = x[i]
     for j in range(sum_nodes):
         nodes[j] = x[sum_units + j]
-    print("Solution x:", x)
+    print("Solution x:", x)   
+
+def main():
+    units, nodes, sum_nodes, sum_units = circuit_init()
+    solver(units, nodes, sum_nodes, sum_units)
 
 if __name__ == "__main__":
     main()
