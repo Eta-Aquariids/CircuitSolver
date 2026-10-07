@@ -61,7 +61,7 @@ class ControlledVoltageSource(Unit):
         vector[unit_id] = self.a
         vector[self.nodes[0] + sum_units] = self.b
         vector[self.nodes[1] + sum_units] = - self.b
-        vector -= self.control
+        vector -= self.c
         return vector, 0    
 
 class ControlledCurrentSource(Unit):
@@ -76,7 +76,7 @@ class ControlledCurrentSource(Unit):
         vector[unit_id] = self.a
         vector[self.nodes[0] + sum_units] = self.b
         vector[self.nodes[1] + sum_units] = - self.b
-        vector -= self.control
+        vector -= self.c
         return vector, 0
 
 
